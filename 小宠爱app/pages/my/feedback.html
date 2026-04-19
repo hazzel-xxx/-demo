@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>意见反馈 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PingFang+SC:wght@400;500;600;700&display=swap');
+        * { font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px - 80px); overflow-y: auto; background: var(--bg-primary); padding: 16px 0; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .form-section { background: var(--bg-secondary); border-radius: 16px; padding: 16px; margin: 0 16px 12px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .form-label { display: block; font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; outline: none; resize: none; background: var(--bg-primary); color: var(--text-primary); }
+        .input-field:focus { border-color: var(--text-tertiary); }
+
+        .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .type-item { padding: 10px; border: 1px solid var(--border-light); border-radius: 12px; text-align: center; font-size: 13px; cursor: pointer; transition: all 0.2s ease; color: var(--text-tertiary); background: var(--bg-primary); }
+        .type-item.selected { border-color: var(--text-primary); background: var(--text-primary); color: #fff; }
+
+        .upload-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .upload-item { aspect-square; background: var(--bg-tertiary); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px dashed var(--border-light); }
+        .upload-item i { font-size: 20px; color: var(--text-tertiary); }
+
+        .rating-stars { display: flex; gap: 8px; justify-content: center; }
+        .star { font-size: 28px; color: var(--border-light); cursor: pointer; transition: all 0.2s ease; }
+        .star.active { color: #FFD700; transform: scale(1.1); }
+
+        .btn-primary { background: var(--text-primary); color: #fff; border: none; border-radius: 24px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.25s ease; }
+        .btn-primary:hover { opacity: 0.9; }
+
+        .bottom-bar { padding: 16px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">意见反馈</div>
+        </div>
+
+        <div class="content">
+            <div class="form-section animate-fadeIn">
+                <label class="form-label">问题类型</label>
+                <div class="type-grid">
+                    <div class="type-item selected" onclick="selectType(this)">功能建议</div>
+                    <div class="type-item" onclick="selectType(this)">Bug反馈</div>
+                    <div class="type-item" onclick="selectType(this)">体验问题</div>
+                    <div class="type-item" onclick="selectType(this)">内容纠错</div>
+                    <div class="type-item" onclick="selectType(this)">其他</div>
+                </div>
+            </div>
+
+            <div class="form-section animate-fadeIn delay-1">
+                <label class="form-label">问题描述</label>
+                <textarea class="input-field" rows="5" placeholder="请详细描述您的问题或建议..."></textarea>
+            </div>
+
+            <div class="form-section animate-fadeIn delay-1">
+                <label class="form-label">上传图片（选填）</label>
+                <div class="upload-grid">
+                    <div class="upload-item">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section animate-fadeIn delay-2">
+                <label class="form-label">联系方式</label>
+                <input type="text" class="input-field" placeholder="请输入手机号或邮箱" style="margin-bottom: 0;">
+            </div>
+
+            <div class="form-section animate-fadeIn delay-2">
+                <label class="form-label">为我们的服务打分</label>
+                <div class="rating-stars">
+                    <i class="fas fa-star star active" onclick="setRating(1)"></i>
+                    <i class="fas fa-star star active" onclick="setRating(2)"></i>
+                    <i class="fas fa-star star active" onclick="setRating(3)"></i>
+                    <i class="fas fa-star star active" onclick="setRating(4)"></i>
+                    <i class="fas fa-star star" onclick="setRating(5)"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-bar">
+            <button class="btn-primary" onclick="submitFeedback()">提交反馈</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+
+        function selectType(el) {
+            document.querySelectorAll('.type-item').forEach(item => item.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        let currentRating = 4;
+
+        function setRating(rating) {
+            currentRating = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitFeedback() {
+            alert('感谢您的反馈，我们会尽快处理！');
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

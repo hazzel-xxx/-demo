@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .content { height: calc(100% - 44px - 72px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .profile-header { background: var(--bg-secondary); padding: 24px 20px 32px; border-bottom: 1px solid var(--border-light); }
+
+        .menu-item { background: var(--bg-secondary); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; transition: all 0.2s ease; cursor: pointer; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); margin-bottom: 10px; }
+        .menu-item:hover { box-shadow: var(--shadow-medium); }
+
+        .tab-bar { height: 72px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); display: flex; position: absolute; bottom: 0; left: 0; right: 0; }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-tertiary); font-size: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .tab-item.active { color: var(--text-primary); }
+        .tab-item i { font-size: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="profile-header animate-fadeIn">
+                <div class="flex items-center gap-4">
+                    <div class="w-18 h-18 rounded-full overflow-hidden" style="width: 72px; height: 72px;">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" class="w-full h-full object-cover" alt="头像">
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-lg font-semibold text-[#2C2C2C] mb-1">李明</h2>
+                        <p class="text-xs text-[#9B9B9B]">ID: 88866688</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 -mt-4">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-[#EBEBEB] animate-fadeIn delay-1">
+                    <div class="flex justify-around">
+                        <div class="text-center cursor-pointer" onclick="goToMyPets()">
+                            <div class="text-2xl font-semibold text-[#2C2C2C]">3</div>
+                            <div class="text-xs text-[#9B9B9B] mt-1">我的宠物</div>
+                        </div>
+                        <div class="w-px bg-[#EBEBEB]"></div>
+                        <div class="text-center cursor-pointer" onclick="goToMyRecords()">
+                            <div class="text-2xl font-semibold text-[#2C2C2C]">128</div>
+                            <div class="text-xs text-[#9B9B9B] mt-1">记录总数</div>
+                        </div>
+                        <div class="w-px bg-[#EBEBEB]"></div>
+                        <div class="text-center cursor-pointer">
+                            <div class="text-2xl font-semibold text-[#2C2C2C]">365</div>
+                            <div class="text-xs text-[#9B9B9B] mt-1">陪伴天数</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 space-y-3 animate-fadeIn delay-2">
+                    <div class="menu-item" onclick="goToEditProfile()">
+                        <div class="w-10 h-10 bg-[#F5F5F5] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-user" style="color: #6B6B6B;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-[#2C2C2C]">个人信息</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #C4C4C4; font-size: 12px;"></i>
+                    </div>
+
+                    <div class="menu-item" onclick="goToSettings()">
+                        <div class="w-10 h-10 bg-[#F5F5F5] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-cog" style="color: #6B6B6B;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-[#2C2C2C]">设置</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #C4C4C4; font-size: 12px;"></i>
+                    </div>
+
+                    <div class="menu-item" onclick="goToHelp()">
+                        <div class="w-10 h-10 bg-[#F5F5F5] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-question-circle" style="color: #6B6B6B;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-[#2C2C2C]">帮助与反馈</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #C4C4C4; font-size: 12px;"></i>
+                    </div>
+
+                    <div class="menu-item" onclick="goToPrivacy()">
+                        <div class="w-10 h-10 bg-[#F5F5F5] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-shield-alt" style="color: #6B6B6B;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-[#2C2C2C]">隐私政策</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #C4C4C4; font-size: 12px;"></i>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center animate-fadeIn delay-3">
+                    <span class="text-xs text-[#C4C4C4]">小宠爱 v1.0.0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-bar">
+            <div class="tab-item" onclick="goToHome()">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item" onclick="goToProfiles()">
+                <i class="fas fa-folder-open"></i>
+                <span>档案</span>
+            </div>
+            <div class="tab-item" onclick="goToRecords()">
+                <i class="fas fa-clipboard-list"></i>
+                <span>日常</span>
+            </div>
+            <div class="tab-item" onclick="goToHealth()">
+                <i class="fas fa-heartbeat"></i>
+                <span>健康</span>
+            </div>
+            <div class="tab-item active" onclick="goToMy()">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToHome() { window.location.href = '../../home.html'; }
+        function goToProfiles() { window.location.href = '../profile/profile-list.html'; }
+        function goToRecords() { window.location.href = '../records/records-home.html'; }
+        function goToHealth() { window.location.href = '../health/health-reminders.html'; }
+        function goToMy() { window.location.href = 'my-home.html'; }
+        function goToMyPets() { window.location.href = '../profile/profile-list.html'; }
+        function goToMyRecords() { window.location.href = '../records/records-home.html'; }
+        function goToEditProfile() { window.location.href = 'edit-profile.html'; }
+        function goToSettings() { window.location.href = 'settings.html'; }
+        function goToHelp() { window.location.href = 'feedback.html'; }
+        function goToPrivacy() { window.location.href = 'privacy-policy.html'; }
+    </script>
+</body>
+</html>

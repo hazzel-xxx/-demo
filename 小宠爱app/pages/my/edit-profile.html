@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>编辑个人信息 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+        .nav-bar .save-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: var(--text-primary); font-size: 14px; font-weight: 600; cursor: pointer; }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .avatar-section { background: var(--bg-secondary); padding: 24px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+
+        .form-card { background: var(--bg-secondary); border-radius: 16px; padding: 16px; margin: 0 16px 12px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .form-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+        .form-row:last-child { border-bottom: none; }
+        .form-label { font-size: 14px; color: var(--text-secondary); }
+        .input-field { border: none; border-bottom: 1px solid var(--border-light); font-size: 14px; outline: none; background: transparent; color: var(--text-primary); text-align: right; padding: 0; width: auto; min-width: 120px; }
+        .input-field:focus { border-bottom-color: var(--text-primary); }
+
+        .btn-primary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-light); border-radius: 24px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; width: calc(100% - 32px); margin: 16px; box-shadow: var(--shadow-soft); }
+
+        .bottom-bar { padding: 16px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">个人信息</div>
+            <div class="save-btn" onclick="saveProfile()">保存</div>
+        </div>
+
+        <div class="content">
+            <div class="avatar-section animate-fadeIn">
+                <div class="relative">
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-[var(--border-light)]">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" class="w-full h-full object-cover" alt="头像">
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-8 h-8 bg-[var(--bg-tertiary)] rounded-full flex items-center justify-center border-2 border-[var(--bg-secondary)]">
+                        <i class="fas fa-camera text-xs" style="color: var(--text-secondary);"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card animate-fadeIn delay-1">
+                <div class="form-row">
+                    <span class="form-label">昵称</span>
+                    <input type="text" class="input-field" value="李明" style="text-align: right; padding: 0;">
+                </div>
+
+                <div class="form-row">
+                    <span class="form-label" style="line-height: 20px;">性别</span>
+                    <div class="flex gap-4" style="line-height: 20px;">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="gender" value="male" class="hidden">
+                            <div class="w-5 h-5 rounded-full border-2 border-[var(--border-light)] flex items-center justify-center">
+                                <div class="w-2.5 h-2.5 rounded-full bg-transparent"></div>
+                            </div>
+                            <span class="text-sm" style="color: var(--text-secondary);">男</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="gender" value="female" checked class="hidden">
+                            <div class="w-5 h-5 rounded-full border-2 border-[var(--text-primary)] flex items-center justify-center">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[var(--text-primary)]"></div>
+                            </div>
+                            <span class="text-sm" style="color: var(--text-secondary);">女</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <span class="form-label">生日</span>
+                    <input type="date" class="input-field" value="1995-06-15" style="color: var(--text-tertiary); text-align: right; padding: 0;">
+                </div>
+
+                <div class="form-row">
+                    <span class="form-label">手机号</span>
+                    <input type="tel" class="input-field" value="138****8888" style="color: var(--text-tertiary); text-align: right; padding: 0;">
+                </div>
+
+                <div class="form-row">
+                    <span class="form-label">邮箱</span>
+                    <input type="email" class="input-field" value="xiaoming@example.com" style="color: var(--text-tertiary); text-align: right; padding: 0;">
+                </div>
+            </div>
+
+            <div class="form-card animate-fadeIn delay-2">
+                <div class="form-row">
+                    <span class="form-label">个人简介</span>
+                </div>
+                <textarea class="input-field resize-none" rows="3" placeholder="介绍一下自己..." style="text-align: left; border-bottom: none; padding: 12px 0;">热爱宠物，喜欢和小动物相处</textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+
+        function saveProfile() {
+            alert('个人信息已保存');
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

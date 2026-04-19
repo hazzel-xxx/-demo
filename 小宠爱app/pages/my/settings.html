@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>设置 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); padding: 16px; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .menu-item { background: var(--bg-secondary); border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 14px; transition: all 0.25s ease; cursor: pointer; margin-bottom: 10px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .menu-item:hover { box-shadow: var(--shadow-medium); transform: translateY(-1px); }
+
+        .toggle { width: 44px; height: 26px; background: var(--bg-tertiary); border-radius: 13px; position: relative; cursor: pointer; transition: all 0.25s ease; }
+        .toggle.active { background: var(--text-primary); }
+        .toggle::after { content: ''; width: 22px; height: 22px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: all 0.25s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .toggle.active::after { left: 20px; }
+
+        .group-title { font-size: 12px; color: var(--text-tertiary); padding: 16px 4px 8px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">设置</div>
+        </div>
+
+        <div class="content">
+            <div class="group-title animate-fadeIn">通用设置</div>
+            <div class="menu-item animate-fadeIn" onclick="toggleNotification()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-bell" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">消息通知</div>
+                </div>
+                <div class="toggle active" id="notificationToggle"></div>
+            </div>
+
+            <div class="menu-item animate-fadeIn delay-1" onclick="toggleDarkMode()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-moon" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">深色模式</div>
+                </div>
+                <div class="toggle" id="darkModeToggle"></div>
+            </div>
+
+            <div class="group-title animate-fadeIn delay-1">宠物设置</div>
+            <div class="menu-item animate-fadeIn delay-1" onclick="goToReminderSettings()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-clock" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">提醒设置</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="menu-item animate-fadeIn delay-2" onclick="goToDataExport()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-download" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">数据导出</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="group-title animate-fadeIn delay-2">其他</div>
+            <div class="menu-item animate-fadeIn delay-2" onclick="goToPrivacy()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-shield-alt" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">隐私政策</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="menu-item animate-fadeIn delay-3" onclick="goToTerms()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-file-contract" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">用户协议</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="menu-item animate-fadeIn delay-3" onclick="clearCache()">
+                <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-trash-alt" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-medium" style="color: var(--text-primary);">清除缓存</div>
+                </div>
+                <span class="text-sm" style="color: var(--text-tertiary);">23.5MB</span>
+            </div>
+
+            <div class="mt-6 animate-fadeIn delay-3">
+                <button class="w-full py-4 bg-[var(--bg-secondary)] border border-[var(--border-light)] text-[#FF6B6B] rounded-2xl font-semibold" style="box-shadow: var(--shadow-soft);" onclick="logout()">
+                    退出登录
+                </button>
+            </div>
+
+            <div class="text-center mt-4 text-xs" style="color: var(--text-tertiary);">
+                小宠爱 v1.0.0
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function goToEditProfile() { window.location.href = 'edit-profile.html'; }
+        function goToPrivacy() { window.location.href = 'privacy-policy.html'; }
+        function goToTerms() { alert('用户协议'); }
+        function goToReminderSettings() { alert('提醒设置'); }
+        function goToDataExport() { alert('数据导出'); }
+
+        function toggleNotification() {
+            const toggle = document.getElementById('notificationToggle');
+            toggle.classList.toggle('active');
+        }
+
+        function toggleDarkMode() {
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.classList.toggle('active');
+        }
+
+        function clearCache() {
+            alert('缓存已清除');
+        }
+
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                window.location.href = '../index.html';
+            }
+        }
+    </script>
+</body>
+</html>

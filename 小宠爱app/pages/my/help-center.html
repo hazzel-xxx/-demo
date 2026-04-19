@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>帮助中心 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PingFang+SC:wght@400;500;600;700&display=swap');
+        * { font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .search-box { background: var(--bg-secondary); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .search-box input { border: none; outline: none; flex: 1; font-size: 14px; background: transparent; color: var(--text-primary); }
+
+        .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 0 16px; margin-bottom: 20px; }
+        .category-item { background: var(--bg-secondary); border-radius: 16px; padding: 16px 8px; text-align: center; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); cursor: pointer; transition: all 0.25s ease; }
+        .category-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-medium); }
+        .category-item.active { background: var(--bg-tertiary); }
+
+        .faq-item { background: var(--bg-secondary); border-radius: 16px; margin: 0 16px 12px; overflow: hidden; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .faq-question { padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .faq-answer { display: none; padding: 0 16px 16px; color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+        .faq-answer.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">帮助中心</div>
+        </div>
+
+        <div class="content">
+            <div class="search-box animate-fadeIn">
+                <i class="fas fa-search" style="color: var(--text-tertiary);"></i>
+                <input type="text" placeholder="搜索帮助问题...">
+            </div>
+
+            <div class="category-grid animate-fadeIn delay-1">
+                <div class="category-item active" onclick="selectCategory(this)">
+                    <i class="fas fa-paw text-2xl mb-2" style="color: var(--text-secondary);"></i>
+                    <div class="text-xs" style="color: var(--text-primary);">宠物档案</div>
+                </div>
+                <div class="category-item" onclick="selectCategory(this)">
+                    <i class="fas fa-clipboard-list text-2xl mb-2" style="color: var(--text-secondary);"></i>
+                    <div class="text-xs" style="color: var(--text-primary);">日常记录</div>
+                </div>
+                <div class="category-item" onclick="selectCategory(this)">
+                    <i class="fas fa-bell text-2xl mb-2" style="color: var(--text-secondary);"></i>
+                    <div class="text-xs" style="color: var(--text-primary);">提醒设置</div>
+                </div>
+                <div class="category-item" onclick="selectCategory(this)">
+                    <i class="fas fa-cog text-2xl mb-2" style="color: var(--text-secondary);"></i>
+                    <div class="text-xs" style="color: var(--text-primary);">其他问题</div>
+                </div>
+            </div>
+
+            <h3 class="text-base font-semibold mb-3 px-4 animate-fadeIn delay-2" style="color: var(--text-primary);">常见问题</h3>
+
+            <div class="faq-item animate-fadeIn delay-2">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="font-medium text-sm" style="color: var(--text-primary);">如何添加新的宠物档案？</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>进入"宠物档案"页面，点击右下角的"+"按钮，按照提示填写宠物信息即可完成添加。</p>
+                </div>
+            </div>
+
+            <div class="faq-item animate-fadeIn delay-2">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="font-medium text-sm" style="color: var(--text-primary);">如何设置健康提醒？</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>在"健康管理"模块中，点击"健康提醒"，选择添加提醒类型，设置提醒时间和周期即可。</p>
+                </div>
+            </div>
+
+            <div class="faq-item animate-fadeIn delay-3">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="font-medium text-sm" style="color: var(--text-primary);">记录的数据可以导出吗？</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>可以在"设置"中找到"数据导出"功能，选择需要导出的数据类型和时间范围，即可导出Excel格式文件。</p>
+                </div>
+            </div>
+
+            <div class="faq-item animate-fadeIn delay-3">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="font-medium text-sm" style="color: var(--text-primary);">如何修改宠物信息？</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>进入宠物档案详情页，点击右上角的"编辑"按钮，即可修改宠物的基础信息和健康记录。</p>
+                </div>
+            </div>
+
+            <div class="faq-item animate-fadeIn delay-4">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="font-medium text-sm" style="color: var(--text-primary);">忘记账号密码怎么办？</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>在登录页面点击"忘记密码"，通过绑定的手机号或邮箱验证后即可重置密码。</p>
+                </div>
+            </div>
+
+            <div class="p-6 text-center animate-fadeIn delay-4">
+                <p class="text-sm mb-3" style="color: var(--text-tertiary);">没找到您需要的答案？</p>
+                <button class="px-6 py-3 rounded-full text-sm font-medium cursor-pointer" style="background: var(--bg-tertiary); color: var(--text-primary);" onclick="goToFeedback()">
+                    联系我们
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function goToFeedback() { window.location.href = 'feedback.html'; }
+
+        function selectCategory(el) {
+            document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function toggleFaq(el) {
+            const answer = el.nextElementSibling;
+            const icon = el.querySelector('i');
+            const isActive = answer.classList.contains('active');
+
+            document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.faq-question i').forEach(i => i.style.transform = 'rotate(0deg)');
+
+            if (!isActive) {
+                answer.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>隐私政策 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PingFang+SC:wght@400;500;600;700&display=swap');
+        * { font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+        
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        
+        body { background: var(--bg-primary); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-secondary); border-radius: 47px; overflow: hidden; box-shadow: var(--shadow-layer); position: relative; }
+        
+        .status-bar { height: 54px; background: var(--bg-secondary); display: flex; align-items: flex-end; justify-content: space-between; padding: 0 28px 8px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: 14px; }
+        
+        .nav-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { color: var(--text-secondary); font-size: 20px; cursor: pointer; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
+        .nav-bar .title { font-size: 18px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+        
+        .content { height: calc(100% - 54px - 44px); overflow-y: auto; background: var(--bg-primary); padding: 20px; }
+        .content::-webkit-scrollbar { display: none; }
+        
+        .policy-card { background: var(--bg-secondary); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); margin-bottom: 16px; }
+        
+        .section-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 20px 0 12px; }
+        .section-title:first-child { margin-top: 0; }
+        
+        .section-content { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 12px; }
+        
+        .update-date { font-size: 13px; color: var(--text-tertiary); margin-bottom: 20px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+        
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">隐私政策</div>
+        </div>
+        
+        <div class="content animate-fadeIn">
+            <p class="update-date">更新日期：2026年1月15日</p>
+            
+            <div class="policy-card">
+                <div class="section-title">一、信息收集</div>
+                <p class="section-content">
+                    小宠爱尊重并保护您的个人隐私。我们收集的信息仅用于为您提供更好的服务体验，包括：宠物档案信息、健康记录、日常活动数据等。
+                </p>
+                
+                <div class="section-title">二、信息使用</div>
+                <p class="section-content">
+                    我们使用收集的信息用于：提供个性化的宠物养护建议、生成健康报告、发送提醒通知、改进服务质量等。
+                </p>
+                
+                <div class="section-title">三、信息共享</div>
+                <p class="section-content">
+                    未经您的同意，我们不会与任何第三方共享您的个人信息，除非法律法规要求或保护用户安全需要。
+                </p>
+                
+                <div class="section-title">四、信息安全</div>
+                <p class="section-content">
+                    我们采用行业标准的安全措施保护您的个人信息，防止数据遭到未经授权的访问、使用或泄露。
+                </p>
+                
+                <div class="section-title">五、用户权利</div>
+                <p class="section-content">
+                    您有权随时查看、修改或删除您的个人信息。如需帮助，请联系我们的客服团队。
+                </p>
+                
+                <div class="section-title">六、Cookie使用</div>
+                <p class="section-content">
+                    为提升用户体验，我们使用Cookie技术记录您的偏好设置和登录状态，您可在浏览器设置中禁用Cookie。
+                </p>
+                
+                <div class="section-title">七、未成年人保护</div>
+                <p class="section-content">
+                    我们非常重视对未成年人信息的保护。如果您是未满18周岁的未成年人，请在监护人的陪同下阅读本政策。
+                </p>
+                
+                <div class="section-title">八、政策更新</div>
+                <p class="section-content">
+                    我们可能会不时更新本隐私政策，更新后的政策将在APP内显著位置发布，敬请留意。
+                </p>
+                
+                <div class="section-title">九、联系我们</div>
+                <p class="section-content">
+                    如您对本隐私政策有任何疑问，请通过以下方式联系我们：<br>
+                    邮箱：privacy@xiaochongai.com<br>
+                    电话：400-888-6666
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+    </script>
+</body>
+</html>
