@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>档案详情 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+        .nav-bar .right-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: var(--text-tertiary); font-size: 14px; cursor: pointer; }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .profile-header { background: var(--bg-secondary); padding: 20px; border-bottom: 1px solid var(--border-light); }
+
+        .tab-bar-custom { display: flex; background: var(--bg-tertiary); border-radius: 12px; padding: 4px; gap: 4px; }
+        .tab-item-custom { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text-tertiary); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+        .tab-item-custom.active { background: var(--text-primary); color: #fff; }
+
+        .info-card { background: var(--bg-secondary); border-radius: 16px; padding: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-size: 13px; color: var(--text-tertiary); }
+        .info-value { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">团子</div>
+            <div class="right-btn" onclick="goToEdit()">
+                <i class="fas fa-pen" style="color: #6B6B6B;"></i>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="profile-header">
+                <div class="flex items-center gap-4 mb-4 animate-fadeIn">
+                    <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=150&h=150&fit=crop" class="w-20 h-20 rounded-full object-cover shadow-md">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="font-semibold text-lg text-[#2C2C2C]">团子</span>
+                            <span class="px-2 py-0.5 bg-[#F5F5F5] rounded-full text-xs text-[#6B6B6B]">中华田园猫</span>
+                        </div>
+                        <div class="text-sm text-[#9B9B9B] mb-2">3岁 · 雌性</div>
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-heartbeat text-xs" style="color: #7A9A7A;"></i>
+                            <span class="text-xs text-[#6B6B6B]">健康评分 95分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="tab-bar-custom mb-5 animate-fadeIn">
+                    <div class="tab-item-custom active" onclick="switchTab('info')">基础信息</div>
+                    <div class="tab-item-custom" onclick="switchTab('vaccine')">疫苗</div>
+                    <div class="tab-item-custom" onclick="switchTab('deworming')">驱虫</div>
+                </div>
+
+                <div id="tab-info" class="tab-content animate-fadeIn">
+                    <div class="info-card mb-4">
+                        <div class="info-row">
+                            <span class="info-label">宠物类型</span>
+                            <span class="info-value">中华田园猫</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">性别</span>
+                            <span class="info-value">雌性</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">生日</span>
+                            <span class="info-value">2023年5月10日</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">年龄</span>
+                            <span class="info-value">3岁</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">体重</span>
+                            <span class="info-value">5.5kg</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">毛色</span>
+                            <span class="info-value">橘色</span>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-row">
+                            <span class="info-label">入住日期</span>
+                            <span class="info-value">2023年6月1日</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">绝育状态</span>
+                            <span class="info-value">未绝育</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">主人</span>
+                            <span class="info-value">李明</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-vaccine" class="tab-content hidden">
+                    <div class="info-card">
+                        <div class="info-row">
+                            <span class="info-label">疫苗类型</span>
+                            <span class="info-value">猫三联疫苗</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">最近接种</span>
+                            <span class="info-value">2026-03-10</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">下次接种</span>
+                            <span class="info-value">2026-09-10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-deworming" class="tab-content hidden">
+                    <div class="info-card">
+                        <div class="info-row">
+                            <span class="info-label">驱虫类型</span>
+                            <span class="info-value">体内外驱虫</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">最近驱虫</span>
+                            <span class="info-value">2026-04-01</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">下次驱虫</span>
+                            <span class="info-value">2026-05-01</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function goToEdit() { window.location.href = 'edit-profile-tuanzi.html'; }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item-custom').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

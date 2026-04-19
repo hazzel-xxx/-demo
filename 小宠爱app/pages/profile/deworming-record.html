@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>驱虫记录 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PingFang+SC:wght@400;500;600;700&display=swap');
+        * { font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+        
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        
+        body { background: var(--bg-primary); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-secondary); border-radius: 47px; overflow: hidden; box-shadow: var(--shadow-layer); position: relative; }
+        
+        .status-bar { height: 54px; background: var(--bg-secondary); display: flex; align-items: flex-end; justify-content: space-between; padding: 0 28px 8px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: 14px; }
+        
+        .nav-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 48px; height: 48px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 20px; cursor: pointer; }
+        .nav-bar .title { font-size: 18px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+        
+        .content { height: calc(100% - 54px - 44px - 80px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+        
+        .form-card { background: var(--bg-secondary); border-radius: 16px; padding: 20px; margin: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-tertiary); margin-bottom: 8px; }
+        .input-field { width: 100%; padding: 14px 16px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s ease; background: var(--bg-primary); color: var(--text-primary); }
+        .input-field:focus { border-color: var(--text-tertiary); background: var(--bg-secondary); }
+        
+        .btn-primary { background: var(--text-primary); color: #fff; border: none; border-radius: 24px; padding: 16px 32px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .bottom-bar { padding: 16px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+        
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">驱虫记录</div>
+        </div>
+        
+        <div class="content animate-fadeIn">
+            <div class="form-card">
+                <div class="form-group">
+                    <label class="form-label">驱虫类型</label>
+                    <input type="text" class="input-field" value="体内驱虫">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">驱虫日期</label>
+                    <input type="date" class="input-field" value="2024-02-20">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">下次驱虫时间</label>
+                    <input type="date" class="input-field" value="2024-03-20">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">驱虫药品</label>
+                    <input type="text" class="input-field" placeholder="请输入药品名称">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">备注</label>
+                    <input type="text" class="input-field" placeholder="可选备注">
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-bar">
+            <button class="btn-primary" onclick="saveRecord()">保存</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function saveRecord() { window.location.href = 'profile-detail.html'; }
+    </script>
+</body>
+</html>

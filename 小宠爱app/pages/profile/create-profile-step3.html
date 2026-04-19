@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>新建档案 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px - 80px); overflow-y: auto; background: var(--bg-primary); padding: 16px; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .step-indicator { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 0; }
+        .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bg-tertiary); transition: all 0.3s ease; }
+        .step-dot.active { width: 24px; border-radius: 4px; background: var(--text-primary); }
+        .step-dot.completed { background: var(--text-primary); }
+
+        .section-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        .form-card { background: var(--bg-secondary); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
+        .input-field { width: 100%; padding: 14px 16px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; outline: none; background: var(--bg-secondary); color: var(--text-primary); transition: all 0.25s ease; }
+        .input-field:focus { border-color: var(--text-tertiary); box-shadow: 0 0 0 3px rgba(0,0,0,0.04); }
+
+        .add-record-btn { width: 100%; padding: 14px; border: 1px dashed var(--border-light); border-radius: 12px; text-align: center; color: var(--text-tertiary); font-size: 13px; cursor: pointer; transition: all 0.25s ease; background: var(--bg-secondary); }
+        .add-record-btn:hover { border-color: var(--text-tertiary); background: var(--bg-tertiary); }
+
+        .btn-primary { background: var(--text-primary); color: #fff; border: none; border-radius: 24px; padding: 14px 32px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; box-shadow: var(--shadow-medium); width: 100%; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-layer); }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-light); border-radius: 24px; padding: 14px 32px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; box-shadow: var(--shadow-soft); }
+
+        .bottom-bar { padding: 16px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); display: flex; gap: 12px; }
+
+        .skip-text { text-align: center; font-size: 13px; color: var(--text-tertiary); margin-top: 16px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">新建档案</div>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step-dot completed"></div>
+            <div class="step-dot completed"></div>
+            <div class="step-dot active"></div>
+        </div>
+
+        <div class="content">
+            <h2 class="text-base font-semibold text-center mb-2 animate-fadeIn" style="color: var(--text-primary);">完善疫苗/驱虫信息</h2>
+            <p class="text-sm text-center mb-6 animate-fadeIn delay-1" style="color: var(--text-tertiary);">选填，可稍后在档案中补充</p>
+
+            <div class="mb-5 animate-fadeIn delay-1">
+                <div class="section-title">
+                    <i class="fas fa-syringe" style="color: var(--text-secondary);"></i> 疫苗记录
+                </div>
+                <div class="form-card">
+                    <div class="add-record-btn" onclick="showAddVaccine()">
+                        <i class="fas fa-plus mr-2"></i>添加疫苗记录
+                    </div>
+                </div>
+
+                <div id="vaccine-form" class="hidden mt-3">
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label class="form-label">疫苗名称</label>
+                            <input type="text" class="input-field" placeholder="如：犬四联疫苗">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">接种日期</label>
+                            <input type="date" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">下次接种时间</label>
+                            <input type="date" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">备注</label>
+                            <input type="text" class="input-field" placeholder="可选">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-5 animate-fadeIn delay-2">
+                <div class="section-title">
+                    <i class="fas fa-pills" style="color: var(--text-secondary);"></i> 驱虫记录
+                </div>
+                <div class="form-card">
+                    <div class="add-record-btn" onclick="showAddDeworming()">
+                        <i class="fas fa-plus mr-2"></i>添加驱虫记录
+                    </div>
+                </div>
+
+                <div id="deworming-form" class="hidden mt-3">
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label class="form-label">驱虫类型</label>
+                            <input type="text" class="input-field" placeholder="如：体内驱虫">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">驱虫日期</label>
+                            <input type="date" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">下次驱虫时间</label>
+                            <input type="date" class="input-field">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="skip-text animate-fadeIn delay-3">跳过此步骤，稍后可在档案详情中补充</p>
+        </div>
+
+        <div class="bottom-bar">
+            <button class="btn-secondary" onclick="goToStep2()">上一步</button>
+            <button class="btn-primary" onclick="completeProfile()">完成</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function goToStep2() { window.location.href = 'create-profile-step2.html'; }
+
+        function showAddVaccine() {
+            document.getElementById('vaccine-form').classList.toggle('hidden');
+        }
+
+        function showAddDeworming() {
+            document.getElementById('deworming-form').classList.toggle('hidden');
+        }
+
+        function completeProfile() {
+            window.location.href = 'profile-detail.html';
+        }
+    </script>
+</body>
+</html>
