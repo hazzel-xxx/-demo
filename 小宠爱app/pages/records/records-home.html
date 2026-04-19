@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日常记录 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+        .nav-bar .right-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: var(--text-tertiary); font-size: 14px; cursor: pointer; }
+
+        .content { height: calc(100% - 44px - 52px - 72px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .category-card { background: var(--bg-secondary); border-radius: 16px; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; transition: all 0.25s ease; cursor: pointer; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .category-card:hover { box-shadow: var(--shadow-medium); transform: translateY(-2px); }
+
+        .search-box { background: var(--bg-secondary); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .search-box input { border: none; outline: none; flex: 1; font-size: 14px; background: transparent; color: var(--text-primary); }
+        .search-box input::placeholder { color: var(--text-tertiary); }
+
+        .fab { width: 52px; height: 52px; background: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-medium); cursor: pointer; transition: all 0.25s ease; position: absolute; bottom: 90px; right: 20px; }
+        .fab:hover { transform: scale(1.05); }
+        .fab:active { transform: scale(0.95); }
+        .fab i { color: #fff; font-size: 18px; }
+
+        .tab-bar { height: 72px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); display: flex; position: absolute; bottom: 0; left: 0; right: 0; }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-tertiary); font-size: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .tab-item.active { color: var(--text-primary); }
+        .tab-item i { font-size: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: flex-end; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--bg-secondary); border-radius: 20px 20px 0 0; width: 393px; padding: 20px; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">日常记录</div>
+            <div class="right-btn">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="p-5">
+                <div class="search-box mb-5 animate-fadeIn">
+                    <i class="fas fa-search" style="color: var(--text-tertiary);"></i>
+                    <input type="text" placeholder="搜索记录...">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-5 animate-fadeIn delay-1">
+                    <div class="category-card" onclick="goToDietRecords()">
+                        <div class="w-12 h-12 bg-[#F0EDE8] rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-bone" style="color: #8B8B8B; font-size: 20px;"></i>
+                        </div>
+                        <span class="font-medium text-sm text-[#2C2C2C] mb-1">饮食记录</span>
+                        <span class="text-xs text-[#9B9B9B]">记录每日饮食</span>
+                    </div>
+
+                    <div class="category-card" onclick="goToHealthRecords()">
+                        <div class="w-12 h-12 bg-[#EBF0EB] rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-heartbeat" style="color: #7A9A7A; font-size: 20px;"></i>
+                        </div>
+                        <span class="font-medium text-sm text-[#2C2C2C] mb-1">体检报告</span>
+                        <span class="text-xs text-[#9B9B9B]">健康数据汇总</span>
+                    </div>
+
+                    <div class="category-card" onclick="goToExerciseRecords()">
+                        <div class="w-12 h-12 bg-[#EEEAF3] rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-running" style="color: #8B7B9B; font-size: 20px;"></i>
+                        </div>
+                        <span class="font-medium text-sm text-[#2C2C2C] mb-1">运动记录</span>
+                        <span class="text-xs text-[#9B9B9B]">活动量追踪</span>
+                    </div>
+
+                    <div class="category-card" onclick="goToGroomingRecords()">
+                        <div class="w-12 h-12 bg-[#F5EFE6] rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-cut" style="color: #9B8B7B; font-size: 20px;"></i>
+                        </div>
+                        <span class="font-medium text-sm text-[#2C2C2C] mb-1">美容记录</span>
+                        <span class="text-xs text-[#9B9B9B]">毛发护理清洁</span>
+                    </div>
+                </div>
+
+                <div class="section-title text-xs font-medium text-[#9B9B9B] uppercase tracking-wider mb-3 animate-fadeIn delay-2">最近记录</div>
+                <div class="space-y-3 animate-fadeIn delay-3">
+                    <div class="bg-white rounded-xl p-4 flex items-center gap-3 shadow-sm border border-[#EBEBEB]">
+                        <div class="w-10 h-10 bg-[#F0EDE8] rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bone text-[#8B8B8B]"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-[#2C2C2C]">饮食记录</div>
+                            <div class="text-xs text-[#9B9B9B]">猫粮 50g · 今天 08:30</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-[#C4C4C4] text-xs"></i>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-4 flex items-center gap-3 shadow-sm border border-[#EBEBEB]">
+                        <div class="w-10 h-10 bg-[#EBF0EB] rounded-lg flex items-center justify-center">
+                            <i class="fas fa-heartbeat text-[#7A9A7A]"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-[#2C2C2C]">体检报告</div>
+                            <div class="text-xs text-[#9B9B9B]">体重 4.5kg · 今天 14:00</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-[#C4C4C4] text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fab" onclick="toggleModal()">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <div class="tab-bar">
+            <div class="tab-item" onclick="goToHome()">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item" onclick="goToProfiles()">
+                <i class="fas fa-folder-open"></i>
+                <span>档案</span>
+            </div>
+            <div class="tab-item active" onclick="goToRecords()">
+                <i class="fas fa-clipboard-list"></i>
+                <span>日常</span>
+            </div>
+            <div class="tab-item" onclick="goToHealth()">
+                <i class="fas fa-heartbeat"></i>
+                <span>健康</span>
+            </div>
+            <div class="tab-item" onclick="goToMy()">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPet = localStorage.getItem('currentPet') || 'tuanzi';
+
+        function goBack() { window.history.back(); }
+        function goToHome() { window.location.href = '../../home.html'; }
+        function goToProfiles() { window.location.href = '../profile/profile-list.html'; }
+        function goToRecords() { location.reload(); }
+        function goToHealth() { window.location.href = '../health/health-reminders.html?pet=' + currentPet; }
+        function goToMy() { window.location.href = '../my/my-home.html'; }
+        function goToDietRecords() { window.location.href = 'diet-records.html?pet=' + currentPet; }
+        function goToHealthRecords() { window.location.href = 'health-records.html?pet=' + currentPet; }
+        function goToExerciseRecords() { window.location.href = 'exercise-records.html?pet=' + currentPet; }
+        function goToGroomingRecords() { window.location.href = 'grooming-records.html?pet=' + currentPet; }
+        function toggleModal() { document.querySelector('.modal').classList.toggle('active'); }
+    </script>
+</body>
+</html>

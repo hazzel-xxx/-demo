@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>运动记录 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px - 80px); overflow-y: auto; background: var(--bg-primary); padding: 16px; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .record-item { background: var(--bg-secondary); border-radius: 14px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; transition: all 0.25s ease; cursor: pointer; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .record-item:hover { box-shadow: var(--shadow-medium); transform: translateY(-2px); }
+
+        .fab { width: 56px; height: 56px; background: var(--bg-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-layer); cursor: pointer; transition: all 0.25s ease; position: absolute; bottom: 90px; right: 20px; border: 1px solid var(--border-light); }
+        .fab:hover { transform: scale(1.08); box-shadow: var(--shadow-layer); }
+        .fab i { color: var(--text-primary); font-size: 20px; }
+
+        .bottom-bar { padding: 16px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">运动记录</div>
+        </div>
+
+        <div class="content">
+            <div class="bg-[var(--bg-secondary)] rounded-2xl p-4 mb-5 animate-fadeIn border border-[var(--border-light)]">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-[var(--bg-tertiary)] rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-running text-2xl" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm" style="color: var(--text-tertiary);">本周运动</div>
+                        <div id="weeklyTotal" class="text-3xl font-bold" style="color: var(--text-primary);">-- <span class="text-lg font-normal">分钟</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2 animate-fadeIn delay-1">
+                <div class="record-item">
+                    <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-walking" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium mb-1" style="color: var(--text-primary);">散步</div>
+                        <div class="text-sm" style="color: var(--text-tertiary);">30分钟 · 2公里</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm" style="color: var(--text-tertiary);">今天</div>
+                    </div>
+                </div>
+
+                <div class="record-item">
+                    <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-basketball" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium mb-1" style="color: var(--text-primary);">玩耍</div>
+                        <div class="text-sm" style="color: var(--text-tertiary);">20分钟 · 0.5公里</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm" style="color: var(--text-tertiary);">今天</div>
+                    </div>
+                </div>
+
+                <div class="record-item">
+                    <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-swimmer" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium mb-1" style="color: var(--text-primary);">游泳</div>
+                        <div class="text-sm" style="color: var(--text-tertiary);">45分钟 · 0.3公里</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm" style="color: var(--text-tertiary);">昨天</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fab" onclick="goToAdd()">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <div class="bottom-bar">
+            <div class="text-center text-xs" style="color: var(--text-tertiary);">共 45 条记录</div>
+        </div>
+    </div>
+
+    <script>
+        const petExerciseRecords = {
+            doudou: [
+                { id: 1, date: '2026-04-20', type: '散步', duration: '30分钟', distance: '2公里', notes: '公园散步' },
+                { id: 2, date: '2026-04-19', type: '跑步', duration: '25分钟', distance: '2公里', notes: '小区跑步' },
+                { id: 3, date: '2026-04-18', type: '玩耍', duration: '20分钟', distance: '0.5公里', notes: '后院玩耍' },
+                { id: 4, date: '2026-04-17', type: '游泳', duration: '30分钟', distance: '0.3公里', notes: '宠物泳池' },
+                { id: 5, date: '2026-04-16', type: '散步', duration: '30分钟', distance: '2公里', notes: '公园散步' },
+                { id: 6, date: '2026-04-15', type: '玩耍', duration: '15分钟', distance: '0.5公里', notes: '飞盘游戏' }
+            ],
+            tuanzi: [
+                { id: 1, date: '2026-04-20', type: '玩耍', duration: '15分钟', distance: '0.2公里', notes: '逗猫棒' },
+                { id: 2, date: '2026-04-18', type: '爬树', duration: '10分钟', distance: '0.1公里', notes: '阳台爬树' },
+                { id: 3, date: '2026-04-15', type: '追逐', duration: '5分钟', distance: '0.1公里', notes: '追逐玩具' }
+            ],
+            xiaomi: [
+                { id: 1, date: '2026-04-20', type: '玩耍', duration: '20分钟', distance: '0.3公里', notes: '激光笔' },
+                { id: 2, date: '2026-04-18', type: '休息', duration: '0分钟', distance: '0公里', notes: '整天睡觉' },
+                { id: 3, date: '2026-04-16', type: '玩耍', duration: '10分钟', distance: '0.2公里', notes: '猫抓板' }
+            ]
+        };
+
+        let currentPet = 'tuanzi';
+
+        function getURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('pet') || 'tuanzi';
+        }
+
+        function initPage() {
+            currentPet = getURLParams();
+            displayExerciseRecords();
+        }
+
+        function displayExerciseRecords() {
+            const records = petExerciseRecords[currentPet] || [];
+            const recordsContainer = document.querySelector('.space-y-2');
+
+            const weeklyTotal = records.reduce((total, record) => {
+                const duration = parseInt(record.duration) || 0;
+                return total + duration;
+            }, 0);
+
+            const weeklyTotalEl = document.getElementById('weeklyTotal');
+            if (weeklyTotalEl) {
+                weeklyTotalEl.innerHTML = weeklyTotal + ' <span class="text-lg font-normal">分钟</span>';
+            }
+
+            if (recordsContainer) {
+                recordsContainer.innerHTML = '';
+
+                records.forEach((record, index) => {
+                    const recordItem = document.createElement('div');
+                    recordItem.className = 'record-item animate-fadeIn delay-' + (index + 1);
+
+                    recordItem.innerHTML = `
+                        <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-running" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium mb-1" style="color: var(--text-primary);">${record.type}</div>
+                            <div class="text-sm" style="color: var(--text-tertiary);">${record.duration} · ${record.distance}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm" style="color: var(--text-tertiary);">${record.date}</div>
+                        </div>
+                    `;
+
+                    recordsContainer.appendChild(recordItem);
+                });
+            }
+        }
+
+        window.onload = initPage;
+
+        function goBack() { window.history.back(); }
+        function goToAdd() { window.location.href = 'exercise-record-add.html?pet=' + currentPet; }
+    </script>
+</body>
+</html>
