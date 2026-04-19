@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>基础建议 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PingFang+SC:wght@400;500;600;700&display=swap');
+        * { font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .accordion-item { background: var(--bg-secondary); border-radius: 16px; margin: 0 16px 12px; overflow: hidden; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); transition: all 0.25s ease; }
+        .accordion-item:hover { box-shadow: var(--shadow-medium); }
+
+        .accordion-header { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .accordion-header.active { background: var(--bg-tertiary); }
+
+        .accordion-content { display: none; padding: 0 16px 16px; }
+        .accordion-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">基础建议</div>
+        </div>
+
+        <div class="content">
+            <div class="pt-4 pb-2">
+                <div class="accordion-item animate-fadeIn">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-bone" style="color: var(--text-secondary); font-size: 18px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold" style="color: var(--text-primary);">饮食建议</div>
+                            <div class="text-xs" style="color: var(--text-tertiary);">科学喂养，健康成长</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="pl-14 space-y-3 text-sm" style="color: var(--text-secondary);">
+                            <p>• 每日定时喂食，幼犬2-3次，成年犬1-2次</p>
+                            <p>• 选择优质狗粮，按体重和年龄调整用量</p>
+                            <p>• 保持饮水充足，每日换新鲜水</p>
+                            <p>• 零食适量，不超过每日摄入的10%</p>
+                            <p>• 避免喂食巧克力、洋葱、葡萄等有毒食物</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item animate-fadeIn delay-1">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-running" style="color: var(--text-secondary); font-size: 18px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold" style="color: var(--text-primary);">运动建议</div>
+                            <div class="text-xs" style="color: var(--text-tertiary);">适度运动，增强体质</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="pl-14 space-y-3 text-sm" style="color: var(--text-secondary);">
+                            <p>• 幼犬每日运动15-30分钟，避免过度</p>
+                            <p>• 成年犬每日运动1-2小时</p>
+                            <p>• 选择合适运动方式，散步、游泳、玩耍</p>
+                            <p>• 避免高温时段户外运动</p>
+                            <p>• 运动后适当休息再喂食</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item animate-fadeIn delay-2">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-heartbeat" style="color: var(--text-secondary); font-size: 18px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold" style="color: var(--text-primary);">健康护理</div>
+                            <div class="text-xs" style="color: var(--text-tertiary);">定期检查，预防疾病</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="pl-14 space-y-3 text-sm" style="color: var(--text-secondary);">
+                            <p>• 每年定期体检，及时发现问题</p>
+                            <p>• 按时接种疫苗，做好免疫记录</p>
+                            <p>• 每月体内外驱虫，保护宠物健康</p>
+                            <p>• 定期清洁耳朵、牙齿、修剪指甲</p>
+                            <p>• 观察精神状态和食欲，发现异常及时就医</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item animate-fadeIn delay-3">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                            <i class="fas fa-bath" style="color: var(--text-secondary); font-size: 18px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-semibold" style="color: var(--text-primary);">日常护理</div>
+                            <div class="text-xs" style="color: var(--text-tertiary);">清洁美容，保持卫生</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="color: var(--text-tertiary); transition: transform 0.25s ease;"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="pl-14 space-y-3 text-sm" style="color: var(--text-secondary);">
+                            <p>• 夏季每周洗澡1次，冬季每2-3周1次</p>
+                            <p>• 选用宠物专用洗护产品</p>
+                            <p>• 定期梳理毛发，防止打结</p>
+                            <p>• 保持生活环境清洁干燥</p>
+                            <p>• 定期更换宠物用品，如窝垫、玩具</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+            const isActive = header.classList.contains('active');
+
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.classList.remove('active');
+                h.querySelector('i').style.transform = 'rotate(0deg)';
+            });
+            document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
+
+            if (!isActive) {
+                header.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+                content.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

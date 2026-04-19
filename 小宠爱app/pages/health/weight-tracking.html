@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>体重监测 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); padding: 16px; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .info-card { background: var(--bg-secondary); border-radius: 16px; padding: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-size: 13px; color: var(--text-tertiary); }
+        .info-value { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+
+        .weight-chart { background: var(--bg-secondary); border-radius: 16px; padding: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); margin-bottom: 16px; }
+        .chart-placeholder { height: 160px; background: var(--bg-tertiary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-tertiary); font-size: 14px; }
+
+        .add-button { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; background: var(--bg-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-layer); cursor: pointer; border: 1px solid var(--border-light); }
+        .add-button i { color: var(--text-primary); font-size: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="title">体重监测</div>
+        </div>
+        <div class="content">
+            <div class="info-card mb-4 animate-fadeIn">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 bg-[var(--bg-tertiary)] rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-weight text-2xl" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm" style="color: var(--text-tertiary);">当前体重</div>
+                        <div id="currentWeight" class="text-3xl font-bold" style="color: var(--text-primary);">-- <span class="text-lg font-normal">kg</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weight-chart animate-fadeIn delay-1">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="font-semibold" style="color: var(--text-primary);">体重趋势</span>
+                    <span class="text-sm" style="color: var(--text-tertiary);">近3个月</span>
+                </div>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line mr-2"></i> 体重趋势图表
+                </div>
+            </div>
+
+            <div class="text-sm font-medium mb-3 mt-4 animate-fadeIn delay-2" style="color: var(--text-primary);">历史记录</div>
+
+            <div class="info-card animate-fadeIn delay-2">
+                <div id="weightRecords"></div>
+            </div>
+        </div>
+        <div class="add-button" onclick="goToAdd()">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+    <script>
+        const petWeightData = {
+            doudou: [
+                { date: '2026-04-20', weight: '28.5kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-04-10', weight: '28.4kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-04-01', weight: '28.3kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-20', weight: '28.2kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-10', weight: '28.1kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-01', weight: '28.0kg', change: '0kg', notes: '稳定' }
+            ],
+            tuanzi: [
+                { date: '2026-04-20', weight: '5.5kg', change: '0kg', notes: '稳定' },
+                { date: '2026-04-10', weight: '5.5kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-04-01', weight: '5.4kg', change: '0kg', notes: '稳定' },
+                { date: '2026-03-20', weight: '5.4kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-10', weight: '5.3kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-01', weight: '5.2kg', change: '+0.1kg', notes: '正常增长' }
+            ],
+            xiaomi: [
+                { date: '2026-04-20', weight: '4.5kg', change: '0kg', notes: '稳定' },
+                { date: '2026-04-10', weight: '4.5kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-04-01', weight: '4.4kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-20', weight: '4.3kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-10', weight: '4.2kg', change: '+0.1kg', notes: '正常增长' },
+                { date: '2026-03-01', weight: '4.1kg', change: '+0.1kg', notes: '正常增长' }
+            ]
+        };
+
+        let currentPet = 'tuanzi';
+
+        function getURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('pet') || 'tuanzi';
+        }
+
+        function initPage() {
+            currentPet = getURLParams();
+            displayWeightRecords();
+        }
+
+        function displayWeightRecords() {
+            const records = petWeightData[currentPet] || [];
+
+            if (records.length > 0) {
+                const latestRecord = records[0];
+                document.getElementById('currentWeight').innerHTML = latestRecord.weight.split('kg')[0] + ' <span class="text-lg font-normal">kg</span>';
+            }
+
+            const recordsContainer = document.getElementById('weightRecords');
+
+            if (recordsContainer) {
+                recordsContainer.innerHTML = '';
+
+                records.forEach((record, index) => {
+                    const recordItem = document.createElement('div');
+                    recordItem.className = 'info-row animate-fadeIn delay-' + (index + 1);
+
+                    recordItem.innerHTML = `
+                        <span class="info-label">${record.date}</span>
+                        <span class="info-value">${record.weight}</span>
+                    `;
+
+                    recordsContainer.appendChild(recordItem);
+                });
+            }
+        }
+
+        window.onload = initPage;
+
+        function goBack() { window.history.back(); }
+        function goToAdd() { window.location.href = 'weight-record-add.html?pet=' + currentPet; }
+    </script>
+</body>
+</html>

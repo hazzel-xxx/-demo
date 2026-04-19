@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>健康提醒 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px - 72px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .tab-bar { height: 72px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); display: flex; position: absolute; bottom: 0; left: 0; right: 0; }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-tertiary); font-size: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .tab-item.active { color: var(--text-primary); }
+        .tab-item i { font-size: 20px; }
+
+        .filter-bar { display: flex; gap: 8px; padding: 16px 20px; }
+        .filter-chip { padding: 8px 16px; background: var(--bg-secondary); border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-light); color: var(--text-tertiary); }
+        .filter-chip.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+
+        .reminder-card { background: var(--bg-secondary); border-radius: 14px; padding: 16px 18px; margin: 0 16px 10px; display: flex; align-items: center; gap: 14px; transition: all 0.25s ease; cursor: pointer; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .reminder-card:hover { box-shadow: var(--shadow-medium); transform: translateY(-1px); }
+        .reminder-card.completed { opacity: 0.5; }
+
+        .fab { width: 52px; height: 52px; background: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-medium); cursor: pointer; transition: all 0.25s ease; position: absolute; bottom: 90px; right: 20px; }
+        .fab:hover { transform: scale(1.05); }
+        .fab:active { transform: scale(0.95); }
+        .fab i { color: #fff; font-size: 18px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">健康提醒</div>
+        </div>
+
+        <div class="content">
+            <div class="filter-bar animate-fadeIn">
+                <div class="filter-chip active">全部</div>
+                <div class="filter-chip">待完成</div>
+                <div class="filter-chip">已完成</div>
+            </div>
+
+            <div class="reminder-card animate-fadeIn delay-1" onclick="goToWeightTracking()">
+                <div class="w-11 h-11 bg-[#EBF0EB] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-weight" style="color: #7A9A7A; font-size: 16px;"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm font-medium text-[#2C2C2C] mb-1">体重监测</div>
+                    <div class="text-xs text-[#9B9B9B]">每周一次</div>
+                </div>
+                <span class="px-2 py-1 bg-[#F5F5F5] rounded-full text-xs text-[#6B6B6B]">明天</span>
+            </div>
+
+            <div class="reminder-card animate-fadeIn delay-1">
+                <div class="w-11 h-11 bg-[#F0EDE8] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-pills" style="color: #8B8B8B; font-size: 16px;"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm font-medium text-[#2C2C2C] mb-1">体内驱虫</div>
+                    <div class="text-xs text-[#9B9B9B]">每月一次</div>
+                </div>
+                <span class="px-2 py-1 bg-[#F0EDE8] rounded-full text-xs text-[#8B8B8B]">3天后</span>
+            </div>
+
+            <div id="vaccineReminder" class="reminder-card completed animate-fadeIn delay-2">
+                <div class="w-11 h-11 bg-[#EBF0EB] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-syringe" style="color: #7A9A7A; font-size: 16px;"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm font-medium text-[#2C2C2C] mb-1">疫苗接种</div>
+                    <div class="text-xs text-[#9B9B9B]">犬四联疫苗</div>
+                </div>
+                <span class="px-2 py-1 bg-[#EBF0EB] rounded-full text-xs text-[#7A9A7A]">已完成</span>
+            </div>
+
+            <div class="reminder-card animate-fadeIn delay-2">
+                <div class="w-11 h-11 bg-[#EEEAF3] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-tooth" style="color: #8B7B9B; font-size: 16px;"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm font-medium text-[#2C2C2C] mb-1">牙齿检查</div>
+                    <div class="text-xs text-[#9B9B9B]">每半年一次</div>
+                </div>
+                <span class="px-2 py-1 bg-[#EEEAF3] rounded-full text-xs text-[#8B7B9B]">15天后</span>
+            </div>
+        </div>
+
+        <div class="fab" onclick="goToAdd()">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <div class="tab-bar">
+            <div class="tab-item" onclick="goToHome()">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item" onclick="goToProfile()">
+                <i class="fas fa-folder-open"></i>
+                <span>档案</span>
+            </div>
+            <div class="tab-item" onclick="goToRecords()">
+                <i class="fas fa-clipboard-list"></i>
+                <span>日常</span>
+            </div>
+            <div class="tab-item active" onclick="goToHealth()">
+                <i class="fas fa-heartbeat"></i>
+                <span>健康</span>
+            </div>
+            <div class="tab-item" onclick="goToMy()">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPet = 'tuanzi';
+
+        function getURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('pet') || 'tuanzi';
+        }
+
+        function initPage() {
+            currentPet = getURLParams();
+            updateVaccineReminder();
+        }
+
+        function updateVaccineReminder() {
+            const vaccineType = currentPet === 'doudou' ? '犬四联疫苗' : '猫三联疫苗';
+            const vaccineEl = document.querySelector('#vaccineReminder .text-xs');
+            if (vaccineEl) {
+                vaccineEl.textContent = vaccineType;
+            }
+        }
+
+        function goBack() { window.history.back(); }
+        function goToHome() { window.location.href = '../../home.html?pet=' + currentPet; }
+        function goToProfile() { window.location.href = '../profile/profile-list.html'; }
+        function goToRecords() { window.location.href = '../records/records-home.html?pet=' + currentPet; }
+        function goToHealth() { location.reload(); }
+        function goToMy() { window.location.href = '../my/my-home.html'; }
+        function goToHealthTrend() { window.location.href = 'health-trend.html?pet=' + currentPet; }
+        function goToWeightTracking() { window.location.href = 'weight-tracking.html?pet=' + currentPet; }
+        function goToAdd() { alert('添加提醒'); }
+
+        window.onload = initPage;
+    </script>
+</body>
+</html>

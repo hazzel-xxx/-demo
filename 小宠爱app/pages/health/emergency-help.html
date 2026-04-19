@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>紧急求助 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); padding: 16px; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .emergency-btn { width: 100%; padding: 20px; border-radius: 16px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: var(--shadow-medium); }
+        .emergency-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-layer); }
+        .emergency-btn:active { transform: scale(0.98); }
+
+        .contact-card { background: var(--bg-secondary); border-radius: 14px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+
+        .call-btn { padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s ease; }
+
+        .tip-card { background: var(--bg-tertiary); border-radius: 14px; padding: 14px; margin-top: 16px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">紧急求助</div>
+        </div>
+
+        <div class="content">
+            <div class="text-center mb-6 animate-fadeIn">
+                <div class="w-20 h-20 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style="box-shadow: var(--shadow-layer);">
+                    <i class="fas fa-phone-alt text-3xl" style="color: var(--text-primary);"></i>
+                </div>
+                <h2 class="text-xl font-semibold mb-2" style="color: var(--text-primary);">紧急求助</h2>
+                <p class="text-sm" style="color: var(--text-tertiary);">在紧急情况下，快速联系专业帮助</p>
+            </div>
+
+            <div class="space-y-3 animate-fadeIn delay-1">
+                <button class="emergency-btn bg-[var(--bg-secondary)] text-[var(--text-primary)]" onclick="callEmergency()">
+                    <i class="fas fa-phone-alt"></i>
+                    紧急呼叫
+                </button>
+
+                <button class="emergency-btn bg-[var(--bg-secondary)] text-[var(--text-primary)]" onclick="findHospital()">
+                    <i class="fas fa-hospital"></i>
+                    附近宠物医院
+                </button>
+            </div>
+
+            <div class="mt-6 animate-fadeIn delay-2">
+                <div class="text-sm font-medium mb-3" style="color: var(--text-secondary);">紧急联系电话</div>
+
+                <div class="contact-card">
+                    <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-clock" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm" style="color: var(--text-primary);">全国宠物急救热线</div>
+                        <div class="text-xs" style="color: var(--text-tertiary);">24小时在线</div>
+                    </div>
+                    <button class="call-btn bg-[var(--bg-tertiary)]" style="color: var(--text-secondary);" onclick="callHotline()">拨打</button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-md" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm" style="color: var(--text-primary);">动物保护协会</div>
+                        <div class="text-xs" style="color: var(--text-tertiary);">工作日 9:00-18:00</div>
+                    </div>
+                    <button class="call-btn bg-[var(--bg-tertiary)]" style="color: var(--text-secondary);" onclick="callAssociation()">拨打</button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="w-10 h-10 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                        <i class="fas fa-hospital" style="color: var(--text-secondary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm" style="color: var(--text-primary);">附近宠物医院</div>
+                        <div class="text-xs" style="color: var(--text-tertiary);">点击查看距离</div>
+                    </div>
+                    <button class="call-btn bg-[var(--bg-tertiary)]" style="color: var(--text-secondary);" onclick="findHospital()">查看</button>
+                </div>
+            </div>
+
+            <div class="tip-card animate-fadeIn delay-3">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-exclamation-circle mt-0.5" style="color: var(--text-secondary);"></i>
+                    <div class="text-sm" style="color: var(--text-secondary);">
+                        <p class="font-medium mb-1" style="color: var(--text-primary);">温馨提示</p>
+                        <p>在等待救援时，请保持冷静，确保宠物安全。如遇严重情况，请立即前往最近的宠物医院。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function callEmergency() { alert('正在拨打紧急救援电话...'); }
+        function findHospital() { alert('正在定位附近宠物医院...'); }
+        function callHotline() { alert('正在拨打全国宠物急救热线...'); }
+        function callAssociation() { alert('正在拨打动物保护协会...'); }
+    </script>
+</body>
+</html>

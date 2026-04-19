@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>常见病症指南 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .nav-bar { height: 52px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border-light); position: relative; }
+        .nav-bar .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start; color: var(--text-secondary); font-size: 16px; cursor: pointer; }
+        .nav-bar .title { font-size: 16px; font-weight: 600; color: var(--text-primary); position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .content { height: calc(100% - 44px - 52px); overflow-y: auto; background: var(--bg-primary); padding: 16px; }
+        .content::-webkit-scrollbar { display: none; }
+
+        .search-box { background: var(--bg-secondary); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .search-box input { border: none; outline: none; flex: 1; font-size: 14px; background: transparent; color: var(--text-primary); }
+        .search-box i { color: var(--text-tertiary); }
+
+        .disease-card { background: var(--bg-secondary); border-radius: 14px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; cursor: pointer; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .disease-card:hover { box-shadow: var(--shadow-medium); transform: translateY(-1px); }
+
+        .tag { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 500; }
+        .tag-common { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .tag-serious { background: #FFE4E4; color: #E57373; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="title">常见病症指南</div>
+        </div>
+
+        <div class="content">
+            <div class="search-box animate-fadeIn">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索病症...">
+            </div>
+
+            <div class="disease-card animate-fadeIn delay-1" onclick="goToDetail()">
+                <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-temperature-high text-lg" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-medium" style="color: var(--text-primary);">发热</span>
+                        <span class="tag tag-common">常见</span>
+                    </div>
+                    <div class="text-sm" style="color: var(--text-tertiary);">体温升高，食欲不振</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="disease-card animate-fadeIn delay-1" onclick="goToDetail()">
+                <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-utensils text-lg" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-medium" style="color: var(--text-primary);">呕吐</span>
+                        <span class="tag tag-common">常见</span>
+                    </div>
+                    <div class="text-sm" style="color: var(--text-tertiary);">食物反流，需观察频率</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="disease-card animate-fadeIn delay-2" onclick="goToDetail()">
+                <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-tint text-lg" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-medium" style="color: var(--text-primary);">腹泻</span>
+                        <span class="tag tag-common">常见</span>
+                    </div>
+                    <div class="text-sm" style="color: var(--text-tertiary);">排便稀软，需注意饮食</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="disease-card animate-fadeIn delay-2" onclick="goToDetail()">
+                <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-lg" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-medium" style="color: var(--text-primary);">皮肤病</span>
+                        <span class="tag tag-serious">需注意</span>
+                    </div>
+                    <div class="text-sm" style="color: var(--text-tertiary);">皮肤瘙痒脱毛，需及时治疗</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="disease-card animate-fadeIn delay-3" onclick="goToDetail()">
+                <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-bone text-lg" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-medium" style="color: var(--text-primary);">关节疾病</span>
+                        <span class="tag tag-serious">需注意</span>
+                    </div>
+                    <div class="text-sm" style="color: var(--text-tertiary);">行走困难，关节肿胀</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+
+            <div class="disease-card animate-fadeIn delay-3" onclick="goToDetail()">
+                <div class="w-12 h-12 bg-[var(--bg-tertiary)] rounded-xl flex items-center justify-center">
+                    <i class="fas fa-eye text-lg" style="color: var(--text-secondary);"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-medium" style="color: var(--text-primary);">眼部疾病</span>
+                        <span class="tag tag-common">常见</span>
+                    </div>
+                    <div class="text-sm" style="color: var(--text-tertiary);">眼睛红肿，分泌物增多</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: var(--text-tertiary); font-size: 12px;"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() { window.history.back(); }
+        function goToDetail() { alert('查看病症详情'); }
+    </script>
+</body>
+</html>
