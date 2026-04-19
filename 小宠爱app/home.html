@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>首页 - 小宠爱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F5F5F5;
+            --accent-sage: #A8A8A8;
+            --accent-muted: #C4C4C4;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-tertiary: #9B9B9B;
+            --border-light: #EBEBEB;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-layer: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        body { background: #E5E5E5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .phone-frame { width: 393px; height: 852px; background: var(--bg-primary); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 80px -15px rgba(0,0,0,0.15); position: relative; }
+
+        .status-bar { height: 44px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--border-light); }
+        .status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .status-bar .icons { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 12px; }
+
+        .content { height: calc(100% - 44px - 72px); overflow-y: auto; background: var(--bg-primary); }
+        .content::-webkit-scrollbar { display: none; }
+
+        .pet-header { background: var(--bg-secondary); padding: 20px 20px 24px; border-bottom: 1px solid var(--border-light); }
+        .pet-switcher { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+        .pet-avatar-wrapper { position: relative; }
+        .pet-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg-secondary); box-shadow: var(--shadow-medium); }
+        .pet-status-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: #7CB97C; border-radius: 50%; border: 2px solid var(--bg-secondary); }
+        .pet-info { flex: 1; }
+        .pet-name { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+        .pet-breed { font-size: 13px; color: var(--text-tertiary); }
+        .pet-health { font-size: 12px; color: var(--text-secondary); margin-top: 4px; padding: 4px 10px; background: var(--bg-tertiary); border-radius: 12px; display: inline-block; }
+        .chevron-icon { color: var(--text-tertiary); font-size: 14px; }
+
+        .pet-selector { background: var(--bg-secondary); margin: 0 16px 16px; border-radius: 16px; padding: 8px; box-shadow: var(--shadow-layer); border: 1px solid var(--border-light); }
+        .pet-option { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
+        .pet-option:hover { background: var(--bg-tertiary); }
+        .pet-option img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+        .pet-option .name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .pet-option .breed { font-size: 12px; color: var(--text-tertiary); margin-left: auto; }
+        .hidden { display: none; }
+
+        .section { padding: 20px; }
+        .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+
+        .reminder-card { background: var(--bg-secondary); border-radius: 16px; padding: 16px 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; transition: all 0.25s ease; cursor: pointer; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .reminder-card:hover { box-shadow: var(--shadow-medium); transform: translateY(-1px); }
+        .reminder-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .reminder-content { flex: 1; min-width: 0; }
+        .reminder-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+        .reminder-desc { font-size: 12px; color: var(--text-tertiary); }
+        .reminder-arrow { color: var(--text-tertiary); font-size: 12px; }
+
+        .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .quick-card { background: var(--bg-secondary); border-radius: 16px; padding: 16px 8px; text-align: center; cursor: pointer; transition: all 0.25s ease; box-shadow: var(--shadow-soft); border: 1px solid var(--border-light); }
+        .quick-card:hover { box-shadow: var(--shadow-medium); transform: translateY(-2px); }
+        .quick-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+        .quick-icon i { font-size: 16px; }
+        .quick-label { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+
+        .tab-bar { height: 72px; background: var(--bg-secondary); border-top: 1px solid var(--border-light); display: flex; position: absolute; bottom: 0; left: 0; right: 0; box-shadow: 0 -2px 16px rgba(0,0,0,0.04); }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-tertiary); font-size: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .tab-item.active { color: var(--text-primary); }
+        .tab-item i { font-size: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+        .delay-4 { animation-delay: 0.2s; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="pet-header">
+                <div class="pet-switcher animate-fadeIn" onclick="togglePetSelector()">
+                    <div class="pet-avatar-wrapper">
+                        <img id="currentPetAvatar" src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=100&h=100&fit=crop&crop=face" class="pet-avatar" alt="宠物头像">
+                        <div class="pet-status-dot"></div>
+                    </div>
+                    <div class="pet-info">
+                        <div id="currentPetName" class="pet-name">团子</div>
+                        <div class="pet-breed">中华田园猫</div>
+                        <div class="pet-health">健康状态良好</div>
+                    </div>
+                    <i class="fas fa-chevron-down chevron-icon"></i>
+                </div>
+
+                <div id="petSelector" class="pet-selector hidden animate-fadeIn">
+                    <div class="pet-option" onclick="selectPet('doudou')">
+                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=100&h=100&fit=crop&crop=face" class="w-12 h-12 rounded-full object-cover">
+                        <span class="name">豆豆</span>
+                        <span class="breed">金毛寻回犬</span>
+                    </div>
+                    <div class="pet-option" onclick="selectPet('tuanzi')">
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=100&h=100&fit=crop&crop=face" class="w-12 h-12 rounded-full object-cover">
+                        <span class="name">团子</span>
+                        <span class="breed">中华田园猫</span>
+                    </div>
+                    <div class="pet-option" onclick="selectPet('xiaomi')">
+                        <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?w=100&h=100&fit=crop&crop=face" class="w-12 h-12 rounded-full object-cover">
+                        <span class="name">小咪</span>
+                        <span class="breed">英国短毛猫</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section animate-fadeIn delay-1">
+                <div class="section-title">今日提醒</div>
+                <div class="space-y-2">
+                    <div class="reminder-card" onclick="goToVaccine()">
+                        <div class="reminder-icon" style="background: #F0EDE8;">
+                            <i class="fas fa-syringe" style="color: #8B8B8B;"></i>
+                        </div>
+                        <div class="reminder-content">
+                            <div class="reminder-title">疫苗接种提醒</div>
+                            <div id="vaccineReminder" class="reminder-desc">犬四联疫苗 · 明天 10:00</div>
+                        </div>
+                        <i class="fas fa-chevron-right reminder-arrow"></i>
+                    </div>
+
+                    <div class="reminder-card" onclick="goToDeworming()">
+                        <div class="reminder-icon" style="background: #EBF0EB;">
+                            <i class="fas fa-pills" style="color: #7A9A7A;"></i>
+                        </div>
+                        <div class="reminder-content">
+                            <div class="reminder-title">体内驱虫</div>
+                            <div class="reminder-desc">每月一次 · 3天后</div>
+                        </div>
+                        <i class="fas fa-chevron-right reminder-arrow"></i>
+                    </div>
+
+                    <div class="reminder-card" onclick="goToHealthTrend()">
+                        <div class="reminder-icon" style="background: #EEEAF3;">
+                            <i class="fas fa-chart-line" style="color: #8B7B9B;"></i>
+                        </div>
+                        <div class="reminder-content">
+                            <div class="reminder-title">健康趋势</div>
+                            <div class="reminder-desc">每周一次 · 周一</div>
+                        </div>
+                        <i class="fas fa-chevron-right reminder-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section animate-fadeIn delay-2">
+                <div class="section-title">快捷入口</div>
+                <div class="quick-grid">
+                    <div class="quick-card" onclick="goToDiet()">
+                        <div class="quick-icon" style="background: #F5EFE6;">
+                            <i class="fas fa-bone" style="color: #9B8B7B;"></i>
+                        </div>
+                        <span class="quick-label">饮食</span>
+                    </div>
+                    <div class="quick-card" onclick="goToHealthExam()">
+                        <div class="quick-icon" style="background: #EBF0EB;">
+                            <i class="fas fa-stethoscope" style="color: #7A9A7A;"></i>
+                        </div>
+                        <span class="quick-label">体检</span>
+                    </div>
+                    <div class="quick-card" onclick="goToExercise()">
+                        <div class="quick-icon" style="background: #EEEAF3;">
+                            <i class="fas fa-running" style="color: #8B7B9B;"></i>
+                        </div>
+                        <span class="quick-label">运动</span>
+                    </div>
+                    <div class="quick-card" onclick="goToGrooming()">
+                        <div class="quick-icon" style="background: #F0EDE8;">
+                            <i class="fas fa-cut" style="color: #8B8B8B;"></i>
+                        </div>
+                        <span class="quick-label">美容</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section animate-fadeIn delay-3">
+                <div class="section-title">养护建议</div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-[#EBEBEB]">
+                    <p class="text-sm text-[#6B6B6B] leading-relaxed suggestion-text">天气晴朗，适合带宠物户外运动，注意补充水分...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-bar">
+            <div class="tab-item active" onclick="goToHome()">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item" onclick="goToProfiles()">
+                <i class="fas fa-folder-open"></i>
+                <span>档案</span>
+            </div>
+            <div class="tab-item" onclick="goToRecords()">
+                <i class="fas fa-clipboard-list"></i>
+                <span>日常</span>
+            </div>
+            <div class="tab-item" onclick="goToHealth()">
+                <i class="fas fa-heartbeat"></i>
+                <span>健康</span>
+            </div>
+            <div class="tab-item" onclick="goToMy()">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPet = 'tuanzi';
+
+        const petsData = {
+            doudou: {
+                name: '豆豆',
+                breed: '金毛寻回犬',
+                avatar: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=100&h=100&fit=crop&crop=face',
+                healthStatus: '健康状态良好',
+                reminders: [
+                    { title: '疫苗接种提醒', details: '犬四联疫苗 · 明天 10:00', icon: 'fa-syringe', bg: '#F0EDE8', color: '#8B8B8B', link: 'goToVaccine()' },
+                    { title: '体内驱虫', details: '每月一次 · 3天后', icon: 'fa-pills', bg: '#EBF0EB', color: '#7A9A7A', link: 'goToDeworming()' },
+                    { title: '健康趋势', details: '每周一次 · 周一', icon: 'fa-chart-line', bg: '#EEEAF3', color: '#8B7B9B', link: 'goToHealthTrend()' }
+                ],
+                suggestion: '天气晴朗，适合带宠物户外运动，注意补充水分...'
+            },
+            tuanzi: {
+                name: '团子',
+                breed: '中华田园猫',
+                avatar: 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=100&h=100&fit=crop&crop=face',
+                healthStatus: '健康状态良好',
+                reminders: [
+                    { title: '猫三联疫苗', details: '加强针 · 2天后', icon: 'fa-syringe', bg: '#F0EDE8', color: '#8B8B8B', link: 'goToVaccine()' },
+                    { title: '体外驱虫', details: '每月一次 · 5天后', icon: 'fa-pills', bg: '#EBF0EB', color: '#7A9A7A', link: 'goToDeworming()' },
+                    { title: '梳毛护理', details: '每周两次 · 今天', icon: 'fa-brush', bg: '#F5EDE6', color: '#9B8B7B', link: 'goToGrooming()' }
+                ],
+                suggestion: '猫咪喜欢安静的环境，今天可以多陪它玩耍，增进感情...'
+            },
+            xiaomi: {
+                name: '小咪',
+                breed: '英国短毛猫',
+                avatar: 'https://images.unsplash.com/photo-1548247416-ec66f4900b2e?w=100&h=100&fit=crop&crop=face',
+                healthStatus: '健康状态良好',
+                reminders: [
+                    { title: '猫三联疫苗', details: '首次接种 · 下周', icon: 'fa-syringe', bg: '#F0EDE8', color: '#8B8B8B', link: 'goToVaccine()' },
+                    { title: '体内驱虫', details: '每三月一次 · 10天后', icon: 'fa-pills', bg: '#EBF0EB', color: '#7A9A7A', link: 'goToDeworming()' },
+                    { title: '牙齿检查', details: '每半年一次 · 15天后', icon: 'fa-tooth', bg: '#EEEAF3', color: '#8B7B9B', link: 'goToHealthTrend()' }
+                ],
+                suggestion: '英国短毛猫需要定期梳理毛发，保持毛发健康...'
+            }
+        };
+
+        function togglePetSelector() {
+            const selector = document.getElementById('petSelector');
+            selector.classList.toggle('hidden');
+        }
+
+        function selectPet(petId) {
+            currentPet = petId;
+            const pet = petsData[petId];
+
+            document.getElementById('currentPetName').textContent = pet.name;
+            document.getElementById('currentPetAvatar').src = pet.avatar;
+            const breedEl = document.querySelector('.pet-breed');
+            if (breedEl) breedEl.textContent = pet.breed;
+            const healthEl = document.querySelector('.pet-health');
+            if (healthEl) healthEl.textContent = pet.healthStatus;
+
+            document.getElementById('petSelector').classList.add('hidden');
+
+            updateReminders(pet.reminders);
+
+            const suggestionEl = document.querySelector('.suggestion-text');
+            if (suggestionEl) suggestionEl.textContent = pet.suggestion;
+
+            const vaccineReminder = document.getElementById('vaccineReminder');
+            if (vaccineReminder) {
+                const vaccineData = pet.reminders.find(r => r.title.includes('疫苗'));
+                if (vaccineData) vaccineReminder.textContent = vaccineData.details;
+            }
+
+            localStorage.setItem('currentPet', petId);
+        }
+
+        function updateReminders(reminders) {
+            const container = document.querySelector('.space-y-2');
+            if (!container) return;
+
+            container.innerHTML = reminders.map((r, i) => `
+                <div class="reminder-card animate-fadeIn delay-${i+1}" onclick="${r.link}">
+                    <div class="reminder-icon" style="background: ${r.bg};">
+                        <i class="fas ${r.icon}" style="color: ${r.color};"></i>
+                    </div>
+                    <div class="reminder-content">
+                        <div class="reminder-title">${r.title}</div>
+                        <div class="reminder-desc">${r.details}</div>
+                    </div>
+                    <i class="fas fa-chevron-right reminder-arrow"></i>
+                </div>
+            `).join('');
+        }
+
+        function initPage() {
+            const savedPet = localStorage.getItem('currentPet') || 'tuanzi';
+            selectPet(savedPet);
+        }
+
+        window.onload = initPage;
+
+        function goToHome() { window.location.href = 'home.html'; }
+        function goToProfiles() { window.location.href = 'pages/profile/profile-list.html?pet=' + currentPet; }
+        function goToRecords() { window.location.href = 'pages/records/records-home.html?pet=' + currentPet; }
+        function goToHealth() { window.location.href = 'pages/health/health-reminders.html?pet=' + currentPet; }
+        function goToMy() { window.location.href = 'pages/my/my-home.html?pet=' + currentPet; }
+        function goToAlbum() { window.location.href = 'pages/records/pet-album.html?pet=' + currentPet; }
+        function goToVaccine() { window.location.href = 'pages/profile/vaccine-record-add.html'; }
+        function goToDeworming() { window.location.href = 'pages/profile/deworming-record-add.html'; }
+        function goToWeight() { window.location.href = 'pages/health/weight-tracking.html'; }
+        function goToHealthTrend() { window.location.href = 'pages/health/health-trend.html?pet=' + currentPet; }
+        function goToGrooming() { window.location.href = 'pages/records/grooming-record-add.html'; }
+        function goToDiet() { window.location.href = 'pages/records/diet-records.html?pet=' + currentPet; }
+        function goToHealthExam() { window.location.href = 'pages/records/health-records.html?pet=' + currentPet; }
+        function goToExercise() { window.location.href = 'pages/records/exercise-records.html?pet=' + currentPet; }
+    </script>
+</body>
+</html>
